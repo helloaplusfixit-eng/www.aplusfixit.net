@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>À Plus Fixit LLC — Verified Home Professionals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0a1628;
+      --navy-light: #112240;
+      --gold: #c9a84c;
+      --gold-light: #f0c96b;
+      --white: #ffffff;
+      --gray: #f5f7fa;
+      --text: #1a202c;
+      --text-light: #5a6a7a;
+      --green: #22c55e;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; font-size: 18px; line-height: 1.6; }
+
+    /* PROGRESS BAR */
+    #progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); z-index: 9999; width: 0%; transition: width 0.1s; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 60px;
+      background: rgba(10,22,40,0.98);
+      backdrop-filter: blur(16px);
+      transition: padding 0.3s, box-shadow 0.3s;
+    }
+    nav.scrolled { padding: 10px 60px; box-shadow: 0 4px 30px rgba(0,0,0,0.4); }
+    .nav-logo { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+    .nav-logo img { height: 56px; width: auto; }
+    .nav-logo-text { color: var(--white); font-size: 1.25rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.3px; }
+    .nav-logo-text small { display: block; color: var(--gold); font-size: 0.68rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+    .nav-links { display: flex; gap: 34px; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 1rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta { background: var(--gold); color: var(--navy); padding: 12px 28px; border-radius: 8px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+    .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
+    .hamburger span { width: 26px; height: 2px; background: white; border-radius: 2px; }
+    .mobile-menu { display: none; position: fixed; top: 74px; left: 0; right: 0; background: var(--navy); padding: 28px 24px; z-index: 99; flex-direction: column; gap: 22px; border-top: 1px solid rgba(201,168,76,0.2); }
+    .mobile-menu a { color: rgba(255,255,255,0.88); text-decoration: none; font-size: 1.2rem; font-weight: 500; }
+    .mobile-menu.open { display: flex; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, #1a3a5c 100%);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 140px 24px 90px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute;
+      width: 900px; height: 900px;
+      background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero-logo { margin: 0 auto 32px; animation: fadeInDown 0.6s ease both; }
+    .hero-logo img { width: 110px; height: auto; filter: drop-shadow(0 6px 24px rgba(201,168,76,0.4)); }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4);
+      color: var(--gold); padding: 9px 22px; border-radius: 24px;
+      font-size: 0.88rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 30px; animation: fadeInDown 0.6s ease 0.1s both;
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 6.5vw, 5rem); font-weight: 900;
+      color: var(--white); line-height: 1.06; max-width: 880px;
+      margin: 0 auto 26px; letter-spacing: -2px;
+      animation: fadeInUp 0.7s ease 0.2s both;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero p {
+      font-size: 1.25rem; color: rgba(255,255,255,0.72); max-width: 580px;
+      margin: 0 auto 46px; line-height: 1.8;
+      animation: fadeInUp 0.7s ease 0.3s both;
+    }
+    .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; animation: fadeInUp 0.7s ease 0.4s both; }
+    .btn-primary { background: var(--gold); color: var(--navy); padding: 18px 44px; border-radius: 10px; font-weight: 700; font-size: 1.1rem; text-decoration: none; transition: all 0.25s; box-shadow: 0 4px 28px rgba(201,168,76,0.35); }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-3px); box-shadow: 0 8px 40px rgba(201,168,76,0.45); }
+    .btn-secondary { background: transparent; color: var(--white); padding: 18px 44px; border-radius: 10px; font-weight: 600; font-size: 1.1rem; text-decoration: none; border: 2px solid rgba(255,255,255,0.28); transition: all 0.25s; }
+    .btn-secondary:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+    .hero-stats { display: flex; gap: 60px; justify-content: center; margin-top: 72px; flex-wrap: wrap; animation: fadeInUp 0.7s ease 0.5s both; }
+    .stat { text-align: center; }
+    .stat-number { font-size: 2.8rem; font-weight: 900; color: var(--gold); }
+    .stat-label { font-size: 0.95rem; color: rgba(255,255,255,0.55); margin-top: 5px; }
+
+    /* TRUST BAR */
+    .trust { background: var(--white); padding: 52px 60px; border-bottom: 1px solid #e8ecf0; }
+    .trust-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .trust-label { font-size: 0.88rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 1.5px; white-space: nowrap; }
+    .trust-items { display: flex; gap: 40px; flex-wrap: wrap; align-items: center; }
+    .trust-item { display: flex; align-items: center; gap: 12px; font-weight: 600; color: var(--text); font-size: 1rem; }
+    .trust-icon { font-size: 1.5rem; }
+
+    /* SECTION */
+    .section { padding: 110px 60px; max-width: 1200px; margin: 0 auto; }
+    .section-tag { display: inline-block; color: var(--gold); font-weight: 700; font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
+    .section h2 { font-size: clamp(2.2rem, 4.5vw, 3.2rem); font-weight: 800; color: var(--navy); line-height: 1.15; margin-bottom: 18px; letter-spacing: -0.5px; }
+    .section-sub { font-size: 1.15rem; color: var(--text-light); max-width: 560px; line-height: 1.8; margin-bottom: 60px; }
+
+    /* HOW IT WORKS */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 26px; }
+    .step { background: var(--gray); border-radius: 20px; padding: 40px 30px; transition: all 0.25s; border: 2px solid transparent; }
+    .step:hover { border-color: var(--gold); background: var(--white); box-shadow: 0 10px 40px rgba(201,168,76,0.12); transform: translateY(-5px); }
+    .step-number { width: 54px; height: 54px; background: var(--navy); color: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.15rem; margin-bottom: 22px; }
+    .step h3 { font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+    .step p { font-size: 1rem; color: var(--text-light); line-height: 1.75; }
+
+    /* SERVICE PHOTO CARDS */
+    .service-photos-bg { background: #f0f3f7; padding: 110px 0; }
+    .service-photos-inner { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
+    .service-photos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 50px; }
+    .sp-card { border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 6px 28px rgba(0,0,0,0.1); transition: all 0.3s; }
+    .sp-card:hover { transform: translateY(-7px); box-shadow: 0 16px 50px rgba(0,0,0,0.18); }
+    .sp-card img { width: 100%; height: 260px; object-fit: cover; display: block; transition: transform 0.4s; }
+    .sp-card:hover img { transform: scale(1.04); }
+    .sp-label { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(10,22,40,0.92) 80%); padding: 36px 24px 22px; }
+    .sp-label h3 { color: var(--white); font-size: 1.2rem; font-weight: 700; margin-bottom: 5px; }
+    .sp-label p { color: var(--gold); font-size: 0.95rem; font-weight: 600; }
+
+    /* SERVICES GRID */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 18px; }
+    .service-card { background: var(--gray); border-radius: 18px; padding: 32px 18px; text-align: center; transition: all 0.25s; border: 2px solid transparent; cursor: pointer; }
+    .service-card:hover { border-color: var(--gold); background: var(--white); box-shadow: 0 8px 32px rgba(201,168,76,0.15); transform: translateY(-5px); }
+    .service-emoji { font-size: 2.8rem; margin-bottom: 14px; display: block; }
+    .service-name { font-size: 1.05rem; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+    .service-price { font-size: 0.92rem; color: var(--text-light); }
+
+    /* PROS */
+    .pros-bg { background: var(--white); padding: 110px 0; }
+    .pros-inner { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
+    .pros-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 28px; margin-top: 50px; }
+    .pro-card { background: var(--gray); border-radius: 22px; overflow: hidden; transition: all 0.25s; border: 2px solid transparent; }
+    .pro-card:hover { border-color: var(--gold); transform: translateY(-6px); box-shadow: 0 14px 44px rgba(201,168,76,0.15); }
+    .pro-img { width: 100%; height: 230px; object-fit: cover; object-position: top; }
+    .pro-info { padding: 24px; }
+    .pro-name { font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .pro-role { font-size: 0.95rem; color: var(--text-light); margin-bottom: 14px; }
+    .pro-meta { display: flex; align-items: center; justify-content: space-between; }
+    .pro-stars { color: var(--gold); font-size: 1.05rem; letter-spacing: 2px; }
+    .pro-badge { background: rgba(201,168,76,0.1); color: var(--gold); font-size: 0.78rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(201,168,76,0.3); }
+    .pro-exp { font-size: 0.9rem; color: var(--text-light); margin-top: 10px; }
+
+    /* VETTING */
+    .vetting-section { background: var(--navy); padding: 110px 60px; }
+    .vetting-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .vetting-section .section-tag { color: var(--gold); }
+    .vetting-section h2 { color: var(--white); font-size: clamp(2.2rem,4.5vw,3.2rem); font-weight:800; margin-bottom:18px; letter-spacing:-0.5px; }
+    .vetting-section .section-sub { color: rgba(255,255,255,0.62); }
+    .vetting-list { display: flex; flex-direction: column; gap: 18px; }
+    .vetting-item { display: flex; align-items: flex-start; gap: 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.15); border-radius: 14px; padding: 22px 26px; transition: all 0.2s; }
+    .vetting-item:hover { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.35); }
+    .vetting-check { width: 46px; height: 46px; background: rgba(201,168,76,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .vetting-item h4 { color: var(--white); font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+    .vetting-item p { color: rgba(255,255,255,0.58); font-size: 0.95rem; line-height: 1.65; }
+    .verified-badge { background: rgba(201,168,76,0.07); border: 2px solid var(--gold); border-radius: 28px; padding: 56px 44px; text-align: center; }
+    .badge-logo { width: 140px; height: auto; margin: 0 auto 24px; display: block; }
+    .badge-title { font-size: 1.8rem; font-weight: 800; color: var(--gold); margin-bottom: 14px; }
+    .badge-sub { color: rgba(255,255,255,0.62); font-size: 1rem; line-height: 1.75; }
+    .badge-checks { display: flex; flex-direction: column; gap: 14px; margin-top: 32px; }
+    .badge-check { display: flex; align-items: center; gap: 14px; color: rgba(255,255,255,0.88); font-size: 1rem; font-weight: 500; }
+    .badge-check-dot { width: 26px; height: 26px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; color: white; font-weight: 800; flex-shrink: 0; }
+
+    /* TESTIMONIALS */
+    .testimonials-bg { background: var(--gray); padding: 110px 0; }
+    .testimonials-inner { max-width: 1200px; margin: 0 auto; padding: 0 60px; text-align: center; }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 26px; text-align: left; margin-top: 50px; }
+    .testimonial { background: var(--white); border-radius: 20px; padding: 36px 34px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 2px solid transparent; transition: all 0.25s; }
+    .testimonial:hover { border-color: var(--gold); box-shadow: 0 10px 36px rgba(201,168,76,0.12); }
+    .stars { color: var(--gold); font-size: 1.2rem; margin-bottom: 16px; letter-spacing: 2px; }
+    .testimonial p { font-size: 1.05rem; color: var(--text); line-height: 1.8; font-style: italic; margin-bottom: 24px; }
+    .testimonial-author { display: flex; align-items: center; gap: 14px; }
+    .author-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; color: var(--gold); font-weight: 700; font-size: 1.05rem; flex-shrink: 0; }
+    .author-name { font-weight: 700; color: var(--navy); font-size: 1.05rem; }
+    .author-location { font-size: 0.9rem; color: var(--text-light); margin-top: 2px; }
+
+    /* FAQ */
+    .faq-bg { background: var(--white); padding: 110px 60px; }
+    .faq-inner { max-width: 900px; margin: 0 auto; }
+    .faq-list { display: flex; flex-direction: column; gap: 14px; margin-top: 50px; }
+    .faq-item { background: var(--gray); border-radius: 14px; overflow: hidden; border: 2px solid transparent; transition: border-color 0.2s; }
+    .faq-item.open { border-color: var(--gold); background: var(--white); }
+    .faq-question { padding: 24px 30px; font-weight: 700; font-size: 1.1rem; color: var(--navy); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .faq-arrow { color: var(--gold); font-size: 0.9rem; transition: transform 0.3s; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-answer { display: none; padding: 0 30px 24px; font-size: 1rem; color: var(--text-light); line-height: 1.85; }
+    .faq-item.open .faq-answer { display: block; }
+
+    /* WAITLIST */
+    .waitlist-section { background: linear-gradient(135deg, var(--navy) 0%, #1a3a5c 100%); padding: 110px 60px; text-align: center; }
+    .waitlist-section .section-tag { color: var(--gold); }
+    .waitlist-section h2 { color: var(--white); font-size: clamp(2.2rem,4.5vw,3.2rem); font-weight:800; margin-bottom:18px; }
+    .waitlist-section .section-sub { color: rgba(255,255,255,0.68); margin: 0 auto 50px; font-size: 1.15rem; }
+    .waitlist-form { max-width: 580px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .waitlist-form input, .waitlist-form select { padding: 18px 22px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.08); color: white; font-size: 1.05rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; }
+    .waitlist-form input:focus, .waitlist-form select:focus { border-color: var(--gold); }
+    .waitlist-form input::placeholder { color: rgba(255,255,255,0.44); }
+    .waitlist-form select option { background: var(--navy); color: white; }
+    .waitlist-submit { background: var(--gold); color: var(--navy); padding: 20px; border-radius: 10px; border: none; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.25s; margin-top: 6px; }
+    .waitlist-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .waitlist-note { color: rgba(255,255,255,0.42); font-size: 0.9rem; }
+
+    /* FOOTER */
+    footer { background: var(--navy); padding: 80px 60px 38px; }
+    .footer-top { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 50px; margin-bottom: 60px; }
+    .footer-brand-logo { height: 68px; width: auto; margin-bottom: 20px; display: block; }
+    .footer-brand p { color: rgba(255,255,255,0.5); font-size: 1rem; line-height: 1.8; max-width: 290px; }
+    .footer-col h4 { color: var(--gold); font-size: 0.88rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 22px; }
+    .footer-col a { display: block; color: rgba(255,255,255,0.56); text-decoration: none; font-size: 1rem; margin-bottom: 14px; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--gold); }
+    .footer-bottom { max-width: 1200px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { color: rgba(255,255,255,0.34); font-size: 0.92rem; }
+    .footer-tagline { color: var(--gold); font-size: 0.92rem; font-weight: 600; }
+
+    /* ANIMATIONS */
+    @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeInUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      nav { padding: 14px 24px; }
+      nav.scrolled { padding: 10px 24px; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .section { padding: 70px 24px; }
+      .service-photos-inner, .pros-inner, .testimonials-inner { padding: 0 24px; }
+      .service-photos-bg, .pros-bg, .testimonials-bg { padding: 70px 0; }
+      .vetting-section { padding: 70px 24px; }
+      .vetting-inner { grid-template-columns: 1fr; gap: 44px; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
+      .trust { padding: 40px 24px; }
+      .faq-bg { padding: 70px 24px; }
+      .waitlist-section { padding: 70px 24px; }
+      footer { padding: 60px 24px 32px; }
+    }
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 2.4rem; letter-spacing: -1px; }
+      .hero p { font-size: 1.1rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .service-photos-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 32px; }
+      .stat-number { font-size: 2.2rem; }
+      .pros-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="#home" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+    <img src="https://media.base44.com/images/public/69d95b326866e0683518658c/d0fb1c3f4_generated_image.png" alt="À Plus Fixit"/>
+    <div class="nav-logo-text">À Plus Fixit <small>Verified Home Pros</small></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#verified">Our Vetting</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#how-it-works" onclick="toggleMenu()">How It Works</a>
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#verified" onclick="toggleMenu()">Our Vetting</a>
+  <a href="#faq" onclick="toggleMenu()">FAQ</a>
+  <a href="#waitlist" onclick="toggleMenu()" style="color:var(--gold);font-weight:700;">Join Waitlist →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div>
+    <div class="hero-logo"><img src="https://media.base44.com/images/public/69d95b326866e0683518658c/d0fb1c3f4_generated_image.png" alt="À Plus Fixit Logo"/></div>
+    <div class="hero-badge">⚡ Launching in South Florida — Be First</div>
+    <h1>Home Repairs Done Right.<br/><span>By Pros You Can Trust.</span></h1>
+    <p>Background-checked, licensed, and insured professionals — ready to handle every job in your home. No guesswork. No surprises.</p>
+    <div class="hero-buttons">
+      <a href="#waitlist" class="btn-primary">Get Early Access — Free</a>
+      <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-number">100%</div><div class="stat-label">Background Checked</div></div>
+      <div class="stat"><div class="stat-number">4.9★</div><div class="stat-label">Avg. Pro Rating</div></div>
+      <div class="stat"><div class="stat-number">$20</div><div class="stat-label">Off First Booking</div></div>
+      <div class="stat"><div class="stat-number">8</div><div class="stat-label">Service Categories</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust">
+  <div class="trust-inner">
+    <span class="trust-label">Trusted because we verify</span>
+    <div class="trust-items">
+      <div class="trust-item"><span class="trust-icon">🔍</span> Background Checked</div>
+      <div class="trust-item"><span class="trust-icon">📋</span> License Verified</div>
+      <div class="trust-item"><span class="trust-icon">🛡️</span> Insured & Bonded</div>
+      <div class="trust-item"><span class="trust-icon">⭐</span> Skills Assessed</div>
+      <div class="trust-item"><span class="trust-icon">💬</span> Real Reviews</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how-it-works">
+  <div class="section-tag">Simple & Fast</div>
+  <h2>Book a Pro in Minutes</h2>
+  <p class="section-sub">From request to completed job — four simple steps. No calls. No guessing. Just results.</p>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-number">1</div>
+      <h3>Choose Your Service</h3>
+      <p>Browse by category — HVAC, plumbing, electrical, painting, and more. Pick what you need in seconds.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-number">2</div>
+      <h3>Pick a Date & Time</h3>
+      <p>Select a date and time window that works for you. Book instantly — no phone calls or back-and-forth.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-number">3</div>
+      <h3>Your Pro Arrives</h3>
+      <p>Your Aplus Verified™ pro shows up on time, fully equipped, and ready to get the job done right.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-number">4</div>
+      <h3>Pay & Review</h3>
+      <p>Pay securely after the job is complete. Leave a review to help your neighbors find great pros too.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE PHOTOS -->
+<div class="service-photos-bg" id="services-gallery">
+  <div class="service-photos-inner">
+    <div class="section-tag">Real Work. Verified Pros.</div>
+    <h2 class="reveal">Every Service, Done Right.</h2>
+    <p class="section-sub reveal">Our professionals handle every type of home service with the quality and reliability you deserve.</p>
+    <div class="service-photos-grid">
+
+      <!-- HVAC -->
+      <div class="sp-card reveal">
+        <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=700&q=85&fit=crop&crop=center" alt="HVAC technician servicing air conditioning unit"/>
+        <div class="sp-label"><h3>HVAC & AC Repair</h3><p>From $89 · Licensed HVAC Technicians</p></div>
+      </div>
+
+      <!-- PLUMBING -->
+      <div class="sp-card reveal">
+        <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=700&q=85&fit=crop&crop=center" alt="Plumber fixing pipes and plumbing system"/>
+        <div class="sp-label"><h3>Plumbing</h3><p>From $75 · Master Plumbers</p></div>
+      </div>
+
+      <!-- ELECTRICAL -->
+      <div class="sp-card reveal">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=85&fit=crop&crop=center" alt="Electrician working on electrical wiring"/>
+        <div class="sp-label"><h3>Electrical</h3><p>From $99 · Certified Electricians</p></div>
+      </div>
+
+      <!-- PAINTING -->
+      <div class="sp-card reveal">
+        <img src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=700&q=85&fit=crop&crop=center" alt="Professional painter painting interior walls"/>
+        <div class="sp-label"><h3>Interior Painting</h3><p>From $120 · Professional Painters</p></div>
+      </div>
+
+      <!-- LANDSCAPING -->
+      <div class="sp-card reveal">
+        <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=700&q=85&fit=crop&crop=center" alt="Landscaper mowing and maintaining lawn"/>
+        <div class="sp-label"><h3>Landscaping</h3><p>From $60 · Lawn & Garden Experts</p></div>
+      </div>
+
+      <!-- HANDYMAN -->
+      <div class="sp-card reveal">
+        <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=700&q=85&fit=crop&crop=center" alt="Handyman doing home repairs and installations"/>
+        <div class="sp-label"><h3>Handyman Services</h3><p>From $65 · Multi-Skilled Pros</p></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES GRID -->
+<section class="section" id="services">
+  <div class="section-tag">All Categories</div>
+  <h2>Every Home Need, Covered</h2>
+  <p class="section-sub" style="margin-bottom:44px;">From emergency repairs to planned renovations — we have a verified pro for every job.</p>
+  <div class="services-grid">
+    <div class="service-card reveal"><span class="service-emoji">❄️</span><div class="service-name">HVAC & AC</div><div class="service-price">From $89</div></div>
+    <div class="service-card reveal"><span class="service-emoji">🚿</span><div class="service-name">Plumbing</div><div class="service-price">From $75</div></div>
+    <div class="service-card reveal"><span class="service-emoji">⚡</span><div class="service-name">Electrical</div><div class="service-price">From $99</div></div>
+    <div class="service-card reveal"><span class="service-emoji">🎨</span><div class="service-name">Painting</div><div class="service-price">From $120</div></div>
+    <div class="service-card reveal"><span class="service-emoji">🔨</span><div class="service-name">Handyman</div><div class="service-price">From $65</div></div>
+    <div class="service-card reveal"><span class="service-emoji">🪵</span><div class="service-name">Carpentry</div><div class="service-price">From $85</div></div>
+    <div class="service-card reveal"><span class="service-emoji">🏠</span><div class="service-name">Roofing</div><div class="service-price">From $150</div></div>
+    <div class="service-card reveal"><span class="service-emoji">🌿</span><div class="service-name">Landscaping</div><div class="service-price">From $60</div></div>
+  </div>
+</section>
+
+<!-- MEET THE PROS -->
+<div class="pros-bg" id="pros">
+  <div class="pros-inner">
+    <div class="section-tag">Our Professionals</div>
+    <h2 class="reveal">Meet Some of Our Aplus Verified™ Pros</h2>
+    <p class="section-sub reveal">Every pro on our platform has passed our full 4-step vetting process. Real professionals — not gig workers.</p>
+    <div class="pros-grid">
+      <div class="pro-card reveal">
+        <img class="pro-img" src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=500&q=80&fit=crop&crop=top" alt="Marcus W. — HVAC Expert"/>
+        <div class="pro-info">
+          <div class="pro-name">Marcus W.</div>
+          <div class="pro-role">HVAC Expert · Miami, FL</div>
+          <div class="pro-meta">
+            <div class="pro-stars">★★★★★</div>
+            <div class="pro-badge">Aplus Verified™</div>
+          </div>
+          <div class="pro-exp">9 yrs experience · 200+ jobs</div>
+        </div>
+      </div>
+      <div class="pro-card reveal">
+        <img class="pro-img" src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=500&q=80&fit=crop&crop=top" alt="Derrick T. — Master Plumber"/>
+        <div class="pro-info">
+          <div class="pro-name">Derrick T.</div>
+          <div class="pro-role">Master Plumber · Fort Lauderdale, FL</div>
+          <div class="pro-meta">
+            <div class="pro-stars">★★★★★</div>
+            <div class="pro-badge">Aplus Verified™</div>
+          </div>
+          <div class="pro-exp">7 yrs experience · 180+ jobs</div>
+        </div>
+      </div>
+      <div class="pro-card reveal">
+        <img class="pro-img" src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=500&q=80&fit=crop&crop=top" alt="Carlos R. — Electrician"/>
+        <div class="pro-info">
+          <div class="pro-name">Carlos R.</div>
+          <div class="pro-role">Certified Electrician · Boca Raton, FL</div>
+          <div class="pro-meta">
+            <div class="pro-stars">★★★★★</div>
+            <div class="pro-badge">Aplus Verified™</div>
+          </div>
+          <div class="pro-exp">5 yrs experience · 120+ jobs</div>
+        </div>
+      </div>
+      <div class="pro-card reveal">
+        <img class="pro-img" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=500&q=80&fit=crop&crop=top" alt="Andre K. — Handyman"/>
+        <div class="pro-info">
+          <div class="pro-name">Andre K.</div>
+          <div class="pro-role">Handyman · Miami, FL</div>
+          <div class="pro-meta">
+            <div class="pro-stars">★★★★★</div>
+            <div class="pro-badge">Aplus Verified™</div>
+          </div>
+          <div class="pro-exp">12 yrs experience · 350+ jobs</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VETTING -->
+<section class="vetting-section" id="verified">
+  <div class="vetting-inner">
+    <div>
+      <div class="section-tag">The Aplus Standard</div>
+      <h2>We Verify Every Pro.<br/>No Exceptions.</h2>
+      <p class="section-sub">We don't let just anyone join. Every professional passes our rigorous 4-step process before taking a single job.</p>
+      <div class="vetting-list">
+        <div class="vetting-item reveal">
+          <div class="vetting-check">🔍</div>
+          <div><h4>Criminal Background Check</h4><p>Comprehensive check through a certified third-party provider. Mandatory for all pros — no exceptions.</p></div>
+        </div>
+        <div class="vetting-item reveal">
+          <div class="vetting-check">📋</div>
+          <div><h4>License Verification</h4><p>We confirm every state license is valid and current — especially for HVAC, electrical, and plumbing.</p></div>
+        </div>
+        <div class="vetting-item reveal">
+          <div class="vetting-check">🛡️</div>
+          <div><h4>Insurance Proof</h4><p>Every pro must carry active liability insurance. We verify the policy before they can go live on the platform.</p></div>
+        </div>
+        <div class="vetting-item reveal">
+          <div class="vetting-check">⭐</div>
+          <div><h4>Skills Assessment</h4><p>Pros are evaluated on expertise and professionalism. Only the best earn the Aplus Verified™ badge.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="verified-badge reveal">
+      <img class="badge-logo" src="https://media.base44.com/images/public/69d95b326866e0683518658c/d0fb1c3f4_generated_image.png" alt="À Plus Fixit Verified Badge"/>
+      <div class="badge-title">Aplus Verified™</div>
+      <p class="badge-sub">When you see this badge, you know your pro has been thoroughly checked, licensed, insured, and tested by our team.</p>
+      <div class="badge-checks">
+        <div class="badge-check"><div class="badge-check-dot">✓</div> Criminal background cleared</div>
+        <div class="badge-check"><div class="badge-check-dot">✓</div> License confirmed valid</div>
+        <div class="badge-check"><div class="badge-check-dot">✓</div> Insurance verified active</div>
+        <div class="badge-check"><div class="badge-check-dot">✓</div> Skills assessed & approved</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<div class="testimonials-bg" id="testimonials">
+  <div class="testimonials-inner">
+    <div class="section-tag">Real Reviews</div>
+    <h2 class="reveal">What Homeowners Are Saying</h2>
+    <p class="section-sub reveal" style="margin:0 auto;">Early feedback from our beta testers and founding customers across South Florida.</p>
+    <div class="testimonials-grid">
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <p>"I've tried TaskRabbit and Angi — nothing compared to the peace of mind knowing my HVAC guy was actually licensed and insured. Aplus is different."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">MR</div>
+          <div><div class="author-name">Maria R.</div><div class="author-location">Miami, FL — Beta User</div></div>
+        </div>
+      </div>
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <p>"As a contractor, I love that customers come to Aplus for quality — not just the cheapest price. I'm not bidding against guys with no experience."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">JD</div>
+          <div><div class="author-name">James D.</div><div class="author-location">Orlando, FL — HVAC Tech</div></div>
+        </div>
+      </div>
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Booked a plumber in literally 3 minutes. He showed up on time, did great work, and the whole experience was smooth from start to finish."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">TK</div>
+          <div><div class="author-name">Tracy K.</div><div class="author-location">Boca Raton, FL — Beta User</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq-bg" id="faq">
+  <div class="faq-inner">
+    <div class="section-tag">Got Questions?</div>
+    <h2 class="reveal">Frequently Asked Questions</h2>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">How does Aplus verify its professionals? <span class="faq-arrow">▼</span></div>
+        <div class="faq-answer">Every pro goes through a 4-step process: criminal background check, license verification, insurance confirmation, and a skills assessment. Only those who pass all four earn the Aplus Verified™ badge.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">Is À Plus Fixit available in my city? <span class="faq-arrow">▼</span></div>
+        <div class="faq-answer">We're launching in South Florida first! Join the waitlist and you'll be notified the moment we go live in your area. Early waitlist members get $20 off their first booking.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">How much does it cost to use Aplus? <span class="faq-arrow">▼</span></div>
+        <div class="faq-answer">Joining the waitlist is completely free. When we launch, booking a pro is free — you only pay for the service itself. Pricing is always shown upfront before you confirm.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">What if I'm not happy with the work? <span class="faq-arrow">▼</span></div>
+        <div class="faq-answer">We stand behind every job with our Happiness Pledge. If you're not satisfied, contact us and we'll make it right — whether that's a redo, a refund, or a new pro sent out.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">I'm a contractor. How do I join Aplus? <span class="faq-arrow">▼</span></div>
+        <div class="faq-answer">We'd love to have you! Apply through our provider sign-up (launching soon). Founding providers get zero commission for their first 30 days and priority placement in search results.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WAITLIST -->
+<section class="waitlist-section" id="waitlist">
+  <div class="section-tag">Be First</div>
+  <h2>Claim Your Spot Today</h2>
+  <p class="section-sub">Launching soon in South Florida. Join the waitlist for early access + <strong style="color:var(--gold)">$20 off your first booking</strong>.</p>
+  <form class="waitlist-form" id="waitlist-form" onsubmit="handleSubmit(event)">
+    <div class="form-row">
+      <input type="text" placeholder="First Name" required />
+      <input type="text" placeholder="Last Name" required />
+    </div>
+    <input type="email" placeholder="Email Address" required />
+    <input type="tel" placeholder="Phone Number (optional)" />
+    <input type="text" placeholder="Your City" />
+    <select>
+      <option value="" disabled selected>What service do you need most?</option>
+      <option>HVAC / AC</option>
+      <option>Plumbing</option>
+      <option>Electrical</option>
+      <option>Painting</option>
+      <option>Handyman</option>
+      <option>Carpentry</option>
+      <option>Roofing</option>
+      <option>Landscaping</option>
+      <option>Multiple</option>
+      <option>Not Sure</option>
+    </select>
+    <button type="submit" class="waitlist-submit">Claim My Spot — It's Free 🚀</button>
+    <p class="waitlist-note">No spam. No credit card. Unsubscribe anytime.</p>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <img class="footer-brand-logo" src="https://media.base44.com/images/public/69d95b326866e0683518658c/d0fb1c3f4_generated_image.png" alt="À Plus Fixit LLC"/>
+      <p>Connecting homeowners with verified, trusted professionals across South Florida — and soon, nationwide.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="#services">HVAC & AC</a>
+      <a href="#services">Plumbing</a>
+      <a href="#services">Electrical</a>
+      <a href="#services">Painting</a>
+      <a href="#services">Handyman</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#verified">Our Vetting</a>
+      <a href="#faq">FAQ</a>
+      <a href="#waitlist">Become a Pro</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="mailto:hello@aplusfixit.net">hello@aplusfixit.net</a>
+      <a href="tel:7863575762">786-357-5762</a>
+      <a href="https://aplusfixit.net">aplusfixit.net</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 À Plus Fixit LLC. All rights reserved.</p>
+    <span class="footer-tagline">Built on Trust. Powered by Verification.™</span>
+  </div>
+</footer>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const el = document.getElementById('progress-bar');
+    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    el.style.width = pct + '%';
+  });
+
+  // Nav scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
+
+  // FAQ
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Waitlist
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.querySelector('.waitlist-submit');
+    btn.textContent = "🎉 You're on the list! We'll be in touch soon.";
+    btn.style.background = '#22c55e';
+    btn.style.color = 'white';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
